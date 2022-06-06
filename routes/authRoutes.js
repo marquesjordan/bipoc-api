@@ -43,6 +43,7 @@ module.exports = (app) => {
                   res.json({
                     success: true,
                     token: 'Bearer ' + token,
+                    name: payload.name,
                     id: payload.id,
                   });
                 },
