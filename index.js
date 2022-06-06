@@ -35,6 +35,9 @@ app.use(
 );
 app.use(cors());
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 require('./routes/authRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
