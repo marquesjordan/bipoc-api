@@ -13,7 +13,7 @@ const keys = require('./config/keys');
 
 require('./models/User');
 
-const PORT = process.env.PORT || 5000;
+const USE_PORT = process.env.PORT || 5000;
 
 const User = mongoose.model('users');
 
@@ -65,7 +65,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://bipoc-web.vercel.app',
   },
 }); //in case server and client run on different urls.
 
@@ -83,7 +83,7 @@ setInterval(() => {
   io.to('clock-room').emit('time', new Date());
 }, 1000);
 
-server.listen(PORT, (err) => {
+server.listen(USE_PORT, (err) => {
   if (err) console.log(err);
-  console.log('Server running on Port: ', PORT);
+  console.log('Server running on Port: ', USE_PORT);
 });
