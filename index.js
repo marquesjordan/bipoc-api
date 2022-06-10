@@ -25,25 +25,12 @@ mongoose.connection.on('error', (err) => {
 
 const app = express();
 
-app.use(function (req, res, next) {
-  if (req.headers['x-forwarded-proto'] == 'http') {
-    res.redirect('https://vast-beach-48711.herokuapp.com' + req.url);
-  } else {
-    return next();
-  }
-});
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey],
-  }),
-);
-app.use(
-  cors({
-    origin: 'https://bipoc-web.vercel.app',
   }),
 );
 
