@@ -26,8 +26,8 @@ mongoose.connection.on('error', (err) => {
 const app = express();
 
 app.use(function (req, res, next) {
-  if (req.headers['x-forwarded-proto'] == 'https') {
-    res.redirect('https://bipoc-web.vercel.app' + req.url);
+  if (req.headers['x-forwarded-proto'] == 'http') {
+    res.redirect('https://vast-beach-48711.herokuapp.com' + req.url);
   } else {
     return next();
   }
@@ -41,7 +41,11 @@ app.use(
     keys: [keys.cookieKey],
   }),
 );
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://bipoc-web.vercel.app',
+  }),
+);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
