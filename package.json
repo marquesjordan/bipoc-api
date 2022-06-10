@@ -11,6 +11,7 @@
   "author": "Marques Jordan",
   "license": "ISC",
   "dependencies": {
+    "@vercel/node": "^2.1.0",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.20.0",
     "cookie-session": "^2.0.0",
