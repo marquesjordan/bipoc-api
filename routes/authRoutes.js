@@ -7,7 +7,6 @@ const User = mongoose.model('users');
 
 module.exports = (app) => {
   app.post('/api/register', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
     User.findOne({ email: req.body.email.toLowerCase() }).then((user) => {
       if (user) {
         return res.status(400).json({ email: 'Email already exists' });

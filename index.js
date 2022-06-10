@@ -13,17 +13,25 @@ const keys = require('./config/keys');
 
 require('./models/User');
 
-const USE_PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 const User = mongoose.model('users');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
 mongoose.connection.on('error', (err) => {
-  console.log(err);
+  console.log('********** ', err);
 });
 
 const app = express();
+
+app.use(function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] == 'https') {
+    res.redirect('https://vast-beach-48711.herokuapp.com' + req.url);
+  } else {
+    return next();
+  }
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,6 +42,7 @@ app.use(
   }),
 );
 app.use(cors());
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
@@ -52,7 +61,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://bipoc-web.vercel.app',
+    origin: 'http://localhost:3000',
   },
 }); //in case server and client run on different urls.
 
@@ -70,7 +79,7 @@ setInterval(() => {
   io.to('clock-room').emit('time', new Date());
 }, 1000);
 
-server.listen(USE_PORT, (err) => {
+server.listen(PORT, (err) => {
   if (err) console.log(err);
-  console.log('Server running on Port: ', USE_PORT);
+  console.log('Server running on Port: ', PORT);
 });
