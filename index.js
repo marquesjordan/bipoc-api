@@ -33,7 +33,6 @@ app.use(
     keys: [keys.cookieKey],
   }),
 );
-app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -42,6 +41,7 @@ require('./routes/authRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
+  app.use(cors());
 
   const path = require('path');
   app.get('*', (req, res) => {
@@ -53,7 +53,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://bipoc-web.vercel.app/',
   },
 }); //in case server and client run on different urls.
 
@@ -71,7 +71,7 @@ setInterval(() => {
   io.to('clock-room').emit('time', new Date());
 }, 1000);
 
-server.listen(PORT, (err) => {
+server.listen(process.env.PORT, (err) => {
   if (err) console.log(err);
-  console.log('Server running on Port: ', PORT);
+  console.log('Server running on Port: ', process.env.PORT);
 });
