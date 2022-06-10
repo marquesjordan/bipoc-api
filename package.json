@@ -11,6 +11,7 @@
   "author": "Marques Jordan",
   "license": "ISC",
   "dependencies": {
+    "@vercel/build-utils": "^4.1.0",
     "@vercel/node": "^2.1.0",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.20.0",
