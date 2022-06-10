@@ -33,7 +33,7 @@ app.use(
     keys: [keys.cookieKey],
   }),
 );
-
+app.use(cors());
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
