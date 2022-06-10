@@ -25,6 +25,14 @@ mongoose.connection.on('error', (err) => {
 
 const app = express();
 
+app.use(function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] == 'http') {
+    res.redirect('https://bipoc-web.vercel.app' + req.url);
+  } else {
+    return next();
+  }
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
