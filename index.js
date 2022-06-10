@@ -26,6 +26,14 @@ mongoose.connection.on('error', (err) => {
 const app = express();
 
 app.use(function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] == 'https') {
+    res.redirect('https://bipoc-web.vercel.app' + req.url);
+  } else {
+    return next();
+  }
+});
+
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'https://bipoc-web.vercel.app'); // update to match the domain you will make the request from
   res.header(
     'Access-Control-Allow-Headers',
