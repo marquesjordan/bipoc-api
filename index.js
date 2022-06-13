@@ -34,6 +34,12 @@ app.use(
   }),
 );
 
+app.use(
+  cors({
+    origin: '*',
+  }),
+);
+
 const allowCrossDomain = function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -50,7 +56,6 @@ require('./routes/authRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
-  app.use(cors());
 
   const path = require('path');
   app.get('*', (req, res) => {
@@ -60,27 +65,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: 'https://bipoc-web.vercel.app/',
-  },
-}); //in case server and client run on different urls.
-
-io.on('connection', (socket) => {
-  console.log('client connected: ', socket.id);
-
-  socket.join('clock-room');
-
-  socket.on('disconnect', (reason) => {
-    console.log(reason);
-  });
-});
-
-setInterval(() => {
-  io.to('clock-room').emit('time', new Date());
-}, 1000);
-
-server.listen(process.env.PORT, (err) => {
+server.listen(PORT, (err) => {
   if (err) console.log(err);
-  console.log('Server running on Port: ', process.env.PORT);
+  console.log('Server running on Port: ', PORT);
 });
