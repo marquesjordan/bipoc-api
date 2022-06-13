@@ -32,10 +32,7 @@ app.use(
 );
 
 const allowCrossDomain = function (req, res, next) {
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://bipoc-web-marquesjordan.vercel.app',
-  );
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
@@ -43,7 +40,7 @@ const allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 app.use(
   cors({
-    origin: 'https://bipoc-web-marquesjordan.vercel.app',
+    origin: '*',
     credentials: true,
   }),
 );
