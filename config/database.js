@@ -3,7 +3,6 @@ const keys = require('./keys');
 
 exports.connect = () => {
   // Connecting to the database
-  console.log(keys.mongoURI);
   mongoose
     .connect(keys.mongoURI, {
       useNewUrlParser: true,

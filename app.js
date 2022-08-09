@@ -2,17 +2,18 @@ require('dotenv').config();
 require('./config/database').connect();
 const mongoose = require('mongoose');
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const keys = require('./config/keys');
 const cors = require('cors');
 const auth = require('./middleware/auth');
 const bodyParser = require('body-parser');
 const app = express();
 
 require('./models/User');
-
-const User = mongoose.model('users');
+require('./models/Post');
+require('./models/Profile');
+require('./models/Company');
+require('./models/Social');
+require('./models/Location');
+require('./models/Message');
 
 app.use(express.json({ limit: '50mb' }));
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -29,9 +30,11 @@ app.options('*', cors()); // enable pre-flight
 app.use(bodyParser.json());
 
 require('./routes/authRoutes')(app);
+require('./routes/postRoutes')(app);
+require('./routes/imageRoutes')(app);
 
 app.get('/api/welcome', auth, (req, res) => {
-  res.status(200).send('Welcome to FreeCodeCamp 🙌');
+  res.status(200).send('Welcome Bipoc');
 });
 
 // This should be the last route else any after it won't work

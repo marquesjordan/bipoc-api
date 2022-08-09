@@ -3,9 +3,24 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const keys = require('../config/keys');
+const e = require('cors');
 const User = mongoose.model('users');
+const Profile = mongoose.model('profile');
+const Company = mongoose.model('company');
+const Social = mongoose.model('social');
+const Location = mongoose.model('location');
 
 module.exports = (app) => {
+  app.post('/api/verify', async (req, res) => {
+    const decoded = jwt.verify(req.body.token, keys.jwtSecretKey);
+
+    if (decoded.user_id) {
+      return res.status(200).send(req.body.token);
+    } else {
+      res.status(400).send('Invalid token');
+    }
+  });
+
   app.post('/api/register', async (req, res) => {
     try {
       // Get user input
@@ -27,6 +42,9 @@ module.exports = (app) => {
       //Encrypt user password
       encryptedUserPassword = await bcrypt.hash(password, 10);
 
+      const userSocial = await Social.create({});
+      const userLocation = await Location.create({});
+
       // Create user in our database
       const user = await User.create({
         name: name,
@@ -34,17 +52,29 @@ module.exports = (app) => {
         password: encryptedUserPassword,
       });
 
-      console.log(user);
+      const profile = await Profile.create({
+        _user: user._id,
+        _social: userSocial._id,
+        _location: userLocation._id,
+        fullName: name,
+        email: email,
+      });
+
+      // Set if Registering as Poster (Not regular user)
+      if (false) {
+        // If company, set profile.type and then exe below:
+
+        const company = await Company.create({});
+        const companySocial = await Social.create({});
+        const companyLocation = await Location.create({});
+      }
 
       // Create token
       const token = jwt.sign({ user_id: user._id, email }, keys.jwtSecretKey, {
         expiresIn: '5h',
       });
-      // save user token
-      //  user.token = token;
 
-      // return new user
-      res.status(201).json({ user, token });
+      res.status(201).json({ user, profile, token });
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +91,6 @@ module.exports = (app) => {
       }
       // Validate if user exist in our database
       const user = await User.findOne({ email });
-
       if (user && (await bcrypt.compare(password, user.password))) {
         // Create token
         const token = jwt.sign(
