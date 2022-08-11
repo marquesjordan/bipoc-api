@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const auth = require('./middleware/auth');
 const bodyParser = require('body-parser');
+const keys = require('./config/keys');
 const app = express();
 
 require('./models/User');
@@ -25,7 +26,7 @@ const allowCrossDomain = function (req, res, next) {
 };
 app.use(allowCrossDomain);
 
-app.use(cors());
+app.use(cors({ origin: keys.client, credentials: true }));
 app.options('*', cors()); // enable pre-flight
 app.use(bodyParser.json());
 

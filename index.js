@@ -3,7 +3,7 @@ const socketio = require('socket.io');
 const app = require('./app');
 const mongoose = require('mongoose');
 const Message = mongoose.model('message');
-const keys = require('./keys');
+const keys = require('./config/keys');
 
 const server = http.createServer(app);
 
