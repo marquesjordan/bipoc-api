@@ -13,6 +13,7 @@ const { getFileStream, uploadFile } = require('../utils/s3');
 
 module.exports = (app) => {
   app.get('/api/images/:key', async (req, res) => {
+    console.log('CALL UN IMGAE');
     const key = req.params.key;
     const readStream = getFileStream(key);
 

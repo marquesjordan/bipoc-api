@@ -12,12 +12,16 @@ const Location = mongoose.model('location');
 
 module.exports = (app) => {
   app.post('/api/verify', async (req, res) => {
-    const decoded = jwt.verify(req.body.token, keys.jwtSecretKey);
+    try {
+      const decoded = jwt.verify(req.body.token, keys.jwtSecretKey);
 
-    if (decoded.user_id) {
-      return res.status(200).send(req.body.token);
-    } else {
-      res.status(400).send('Invalid token');
+      if (decoded.user_id) {
+        return res.status(200).send(req.body.token);
+      } else {
+        res.status(400).send('Invalid token');
+      }
+    } catch (err) {
+      res.status(400).send('Token Expired');
     }
   });
 
